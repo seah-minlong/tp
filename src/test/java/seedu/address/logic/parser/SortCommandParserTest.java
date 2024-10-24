@@ -22,7 +22,7 @@ public class SortCommandParserTest {
 
     @Test
     public void parse_validSortOption_returnsSortCommand() {
-        SortOption sortOption = new SortOption("name");
+        SortOption sortOption = SortOption.NAME;
         assertParseSuccess(parser, " s/name", new SortCommand(sortOption));
     }
 

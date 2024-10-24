@@ -196,9 +196,10 @@ public class ParserUtil {
     public static SortOption parseSortOption(String sortOption) throws ParseException {
         requireNonNull(sortOption);
         String trimmedOption = sortOption.trim();
-        if (!SortOption.isValidSortOption(trimmedOption)) {
+        try {
+            return SortOption.fromString(trimmedOption);
+        } catch (IllegalArgumentException e) {
             throw new ParseException(SortOption.MESSAGE_CONSTRAINTS);
         }
-        return new SortOption(trimmedOption);
     }
 }

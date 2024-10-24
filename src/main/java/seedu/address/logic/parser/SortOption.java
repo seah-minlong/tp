@@ -1,23 +1,37 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import seedu.address.model.person.Person;
+import seedu.address.model.person.comparators.NameComparator;
+import seedu.address.model.person.comparators.VolunteerComparator;
 
 /**
  * Contains valid sorting options for the sort command.
  */
-public class SortOption {
-    public static final String SORT_NAME = "name";
-    public static final String SORT_HOURS = "hours";
-    // Add more sorting options if needed
-
-    // Add other sorting options here
-    public static final List<String> VALID_SORT_OPTIONS = List.of(SORT_NAME, SORT_HOURS);
+public enum SortOption {
+    NAME("name") {
+        @Override
+        public Comparator<Person> getComparator() {
+            return new NameComparator();
+        }
+    },
+    HOURS("hours") {
+        @Override
+        public Comparator<Person> getComparator() {
+            return new VolunteerComparator();
+        }
+    };
+    // Add more sorting options here if needed
 
     public static final String MESSAGE_CONSTRAINTS = "Invalid sort option.\nValid options are: "
-            + String.join(", ", VALID_SORT_OPTIONS);
+            + getValidSortOptionsAsString();
 
     public static final String MESSAGE_EMPTY_SORT_OPTION = "Sort option cannot be empty.";
 
@@ -26,44 +40,61 @@ public class SortOption {
     /**
      * Constructs a {@code SortOption}.
      *
-     * @param option A valid sort option.
+     * @param value A valid sort option.
      */
-    public SortOption(String option) {
-        requireNonNull(option);
-        checkArgument(isValidSortOption(option), MESSAGE_CONSTRAINTS);
-        value = option;
+    SortOption(String value) {
+        this.value = value;
     }
 
     /**
-     * Returns true if a given string is a valid SortOption.
+     * Parses a {@code String sortOption} into a {@code SortOption}.
+     *
+     * @param sortOption The sort option string to parse.
+     * @return The corresponding {@code SortOption}.
+     * @throws IllegalArgumentException If the sort option is invalid.
      */
-    public static boolean isValidSortOption(String sortOption) {
+    public static SortOption fromString(String sortOption) {
+        requireNonNull(sortOption);
         sortOption = sortOption.toLowerCase();
-        return VALID_SORT_OPTIONS.contains(sortOption);
+        for (SortOption option : SortOption.values()) {
+            if (option.value.equalsIgnoreCase(sortOption)) {
+                return option;
+            }
+        }
+        throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
+    }
+
+    /**
+     * Returns the appropriate comparator for the sort option.
+     *
+     * @return {@code Comparator<Person>} based on the sort option.
+     */
+    public abstract Comparator<Person> getComparator();
+
+    /**
+     * Returns an unmodifiable list of valid sort option strings.
+     *
+     * @return List of valid sort options.
+     */
+    private static List<String> getValidSortOptions() {
+        return Collections.unmodifiableList(
+                Arrays.stream(SortOption.values())
+                        .map(SortOption::toString)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    /**
+     * Returns a comma-separated string of valid sort options.
+     *
+     * @return String of valid sort options.
+     */
+    private static String getValidSortOptionsAsString() {
+        return String.join(", ", getValidSortOptions());
     }
 
     @Override
     public String toString() {
         return value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-
-        // instanceof handles nulls
-        if (!(other instanceof SortOption)) {
-            return false;
-        }
-
-        SortOption otherSortOption = (SortOption) other;
-        return value.equals(otherSortOption.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
     }
 }

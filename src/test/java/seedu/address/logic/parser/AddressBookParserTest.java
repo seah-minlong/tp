@@ -91,9 +91,9 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_sort() throws Exception {
-        SortOption sortOption = new SortOption(SortOption.SORT_NAME);
+        SortOption sortOption = SortOption.NAME;
         SortCommand command = (SortCommand) parser.parseCommand(
-                SortCommand.COMMAND_WORD + " s/" + SortOption.SORT_NAME);
+                SortCommand.COMMAND_WORD + " s/" + SortOption.NAME);
         assertEquals(new SortCommand(sortOption), command);
 
         // Test for no sort option (default behavior)

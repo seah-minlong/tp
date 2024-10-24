@@ -2,8 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SORT;
-import static seedu.address.logic.parser.SortOption.SORT_HOURS;
-import static seedu.address.logic.parser.SortOption.SORT_NAME;
 
 import java.util.logging.Logger;
 
@@ -12,8 +10,6 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.SortOption;
 import seedu.address.model.Model;
 import seedu.address.model.person.Volunteer;
-import seedu.address.model.person.comparators.NameComparator;
-import seedu.address.model.person.comparators.VolunteerComparator;
 
 /**
  * Sorts the person list based on the specified option.
@@ -30,10 +26,11 @@ public class SortCommand extends Command {
     public static final String MESSAGE_DEFAULT_SUCCESS = "Sorted by default order";
     public static final String MESSAGE_SORT_SUCCESS = "Sorted by %s";
     public static final String MESSAGE_UNSUPPORTED_SORT_OPTION = "Unsupported sort option: %s";
-    public static final String MESSAGE_SORT_HOURS_WITH_NON_VOLUNTEERS =
-            "Volunteers sorted by hours contributed. Non-volunteers are listed after volunteers.";
-    public static final String MESSAGE_SORT_HOURS_NO_VOLUNTEERS =
-            "No volunteers found. The list remains unsorted.";
+
+    public static final String MESSAGE_SORT_BY_ROLE_CRITERIA_WITH_OTHERS =
+            "%1$ss sorted by %2$s. Non-%3$ss are listed after %3$ss.";
+    public static final String MESSAGE_SORT_BY_ROLE_CRITERIA_NONE_FOUND =
+            "No %ss found. The list remains unsorted.";
 
     private static final Logger logger = LogsCenter.getLogger(SortCommand.class);
 
@@ -71,10 +68,10 @@ public class SortCommand extends Command {
             return executeDefaultSort(model);
         }
 
-        switch (sortOption.toString()) {
-        case SORT_NAME:
+        switch (sortOption) {
+        case NAME:
             return executeSortByName(model);
-        case SORT_HOURS:
+        case HOURS:
             return executeSortByHours(model);
         default:
             // Log that an unexpected sort option has been encountered
@@ -85,10 +82,9 @@ public class SortCommand extends Command {
     }
 
     /**
-     * Resets the person list to its default order (insertion order).
+     * Creates a {@code CommandResult} indicating that the list has been sorted to its default order (insertion order).
      *
-     * @param model The model on which to clear the sort.
-     * @return A CommandResult indicating that the list has been sorted in the default order.
+     * @return A {@code CommandResult}
      */
     private static CommandResult executeDefaultSort(Model model) {
         return new CommandResult(MESSAGE_DEFAULT_SUCCESS);
@@ -101,7 +97,7 @@ public class SortCommand extends Command {
      * @return A CommandResult indicating that the list has been sorted by name.
      */
     private CommandResult executeSortByName(Model model) {
-        model.updatePersonListSort(new NameComparator());
+        updateSort(model);
         return new CommandResult(String.format(MESSAGE_SORT_SUCCESS, sortOption));
     }
 
@@ -118,17 +114,35 @@ public class SortCommand extends Command {
      *         - If there are no volunteers, the list remains unsorted.
      */
     private CommandResult executeSortByHours(Model model) {
+        String entityType = "Volunteer";
+        String sortCriterion = "hours contributed";
+
         if (!model.hasPersonsOfType(Volunteer.class)) {
-            return new CommandResult(MESSAGE_SORT_HOURS_NO_VOLUNTEERS);
+            return new CommandResult(String.format(MESSAGE_SORT_BY_ROLE_CRITERIA_NONE_FOUND,
+                    entityType.toLowerCase()));
         }
 
-        model.updatePersonListSort(new VolunteerComparator());
+        updateSort(model);
 
         if (model.hasOnlyPersonsOfType(Volunteer.class)) {
             return new CommandResult(String.format(MESSAGE_SORT_SUCCESS, sortOption));
         } else {
-            return new CommandResult(MESSAGE_SORT_HOURS_WITH_NON_VOLUNTEERS);
+            return new CommandResult(String.format(MESSAGE_SORT_BY_ROLE_CRITERIA_WITH_OTHERS,
+                    entityType, sortCriterion, entityType.toLowerCase()));
         }
+    }
+
+    /**
+     * Updates the sorting of the person list in the given {@code Model} based on the current {@code SortOption}.
+     *
+     * This method retrieves the appropriate comparator from the {@code SortOption} and applies it to
+     * the person list in the {@code Model} to update the sorting order.
+     *
+     * @param model The model containing the person list to be sorted. Must not be null.
+     */
+    private void updateSort(Model model) {
+        assert sortOption != null;
+        model.updatePersonListSort(sortOption.getComparator());
     }
 
     @Override

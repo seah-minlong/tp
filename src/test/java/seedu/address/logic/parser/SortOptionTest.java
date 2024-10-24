@@ -1,8 +1,6 @@
 package seedu.address.logic.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -13,76 +11,51 @@ import org.junit.jupiter.api.Test;
 public class SortOptionTest {
 
     @Test
-    public void constructor_null_throwsNullPointerException() {
+    public void fromString_null_throwsNullPointerException() {
         // Null input should throw NullPointerException
-        assertThrows(NullPointerException.class, () -> new SortOption(null));
+        assertThrows(NullPointerException.class, () -> SortOption.fromString(null));
     }
 
     @Test
-    public void constructor_validOption_createsSortOption() {
-        // Valid sort option
-        SortOption sortOption = new SortOption("name");
-        assertEquals("name", sortOption.toString());
+    public void fromString_validOption_returnsSortOption() {
+        // Valid sort option: "name"
+        SortOption sortOptionName = SortOption.fromString("name");
+        assertEquals(SortOption.NAME, sortOptionName);
+        assertEquals("name", sortOptionName.toString());
+
+        // Valid sort option: "hours"
+        SortOption sortOptionHours = SortOption.fromString("hours");
+        assertEquals(SortOption.HOURS, sortOptionHours);
+        assertEquals("hours", sortOptionHours.toString());
+
+        // Valid sort option with different casing: "NaMe"
+        SortOption sortOptionNameCase = SortOption.fromString("NaMe");
+        assertEquals(SortOption.NAME, sortOptionNameCase);
+        assertEquals("name", sortOptionNameCase.toString());
+
+        // Valid sort option with different casing: "HoUrS"
+        SortOption sortOptionHoursCase = SortOption.fromString("HoUrS");
+        assertEquals(SortOption.HOURS, sortOptionHoursCase);
+        assertEquals("hours", sortOptionHoursCase.toString());
     }
 
     @Test
-    public void constructor_invalidOption_throwsIllegalArgumentException() {
+    public void fromString_invalidOption_throwsIllegalArgumentException() {
         String invalidOption = "NotSortOption";
-        assertThrows(IllegalArgumentException.class, () -> new SortOption(invalidOption));
-    }
+        String emptyOption = "";
+        String whitespaceOption = "   ";
+        String partiallyInvalidOption = "namee";
 
-    @Test
-    public void isValidSortOption_null_throwsNullPointerException() {
-        // Null input should throw NullPointerException
-        assertThrows(NullPointerException.class, () -> SortOption.isValidSortOption(null));
-    }
+        // Invalid sort option: "NotSortOption"
+        assertThrows(IllegalArgumentException.class, () -> SortOption.fromString(invalidOption));
 
-    @Test
-    public void isValidSortOption_validOption_returnsTrue() {
-        // Valid sort options
-        assertTrue(SortOption.isValidSortOption("name"));
-        assertTrue(SortOption.isValidSortOption("name")); // Case-insensitive
-    }
+        // Invalid sort option: empty string
+        assertThrows(IllegalArgumentException.class, () -> SortOption.fromString(emptyOption));
 
-    @Test
-    public void isValidSortOption_invalidOption_returnsFalse() {
-        // Invalid sort options
-        assertFalse(SortOption.isValidSortOption("age")); // Not in VALID_SORT_OPTIONS
-        assertFalse(SortOption.isValidSortOption(""));
-        assertFalse(SortOption.isValidSortOption(" "));
-    }
+        // Invalid sort option: whitespace string
+        assertThrows(IllegalArgumentException.class, () -> SortOption.fromString(whitespaceOption));
 
-    @Test
-    public void testHashCode() {
-        SortOption sortOption1 = new SortOption("name");
-        SortOption sortOption2 = new SortOption("name");
-
-        // Ensure that hashCode returns the same value consistently
-        int initialHashCode = sortOption1.hashCode();
-        assertEquals(initialHashCode, sortOption1.hashCode());
-        assertEquals(initialHashCode, sortOption1.hashCode());
-
-        // Ensure their hash codes are the same
-        assertEquals(sortOption1.hashCode(), sortOption2.hashCode());
-    }
-
-    @Test
-    public void equals() {
-        SortOption sortOption = new SortOption("name");
-
-        // same values -> returns true
-        assertTrue(sortOption.equals(new SortOption("name")));
-
-        // same object -> returns true
-        assertTrue(sortOption.equals(sortOption));
-
-        // null -> returns false
-        assertFalse(sortOption.equals(null));
-
-        // different types -> returns false
-        assertFalse(sortOption.equals(5));
-
-        // Currently can only create SortOption with name.
-        // Add more cases to check SortOption are not equal when option is different
+        // Invalid sort option: partially invalid
+        assertThrows(IllegalArgumentException.class, () -> SortOption.fromString(partiallyInvalidOption));
     }
 }
