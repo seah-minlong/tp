@@ -99,7 +99,6 @@ public class Person {
 
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
         return Objects.hash(name, phone, email, address, tags);
     }
 
@@ -116,5 +115,17 @@ public class Person {
 
     public Role getRole() {
         return Role.PERSON;
+    }
+
+    /**
+     * Compares this person's name with another person's name lexicographically, ignoring case considerations.
+     *
+     * @param otherPerson The other person whose name is to be compared.
+     * @return A negative integer, zero, or a positive integer as this person's name
+     *         is less than, equal to, or greater than the specified person's name, ignoring case.
+     * @throws NullPointerException if {@code otherPerson} is null or if {@code otherPerson.name} is null.
+     */
+    public int compareNamesIgnorecase(Person otherPerson) {
+        return name.compareToIgnoreCase(otherPerson.name);
     }
 }

@@ -26,19 +26,18 @@ import seedu.address.model.tag.Tag;
  * Sets the hours of an existing volunteer in the address book
  */
 public class SetVolunteerHoursCommand extends Command {
-    public static final String COMMAND_WORD = "sethours";
+    public static final String COMMAND_WORD = "setHours";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the hours of the volunteer identified "
             + "by the index number used in the displayed person list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "[" + PREFIX_HOURS + "NAME] "
+            + PREFIX_HOURS + "HOURS\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_HOURS + "20 ";
+            + PREFIX_HOURS + "20";
 
     public static final String MESSAGE_SET_VOLUNTEER_HOURS_SUCCESS = "New hours for: %1$s";
     public static final String MESSAGE_NOT_EDITED = "The new number of hours must be provided.";
-    public static final String MESSAGE_NOT_IMPLEMENTED = "The execute function has not been implemented.";
     private final Index index;
     private final String newHours;
 

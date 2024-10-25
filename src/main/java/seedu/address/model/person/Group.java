@@ -9,7 +9,7 @@ import static java.util.Objects.requireNonNull;
  * @see UniquePersonList
  */
 public class Group extends UniquePersonList {
-    private String name;
+    private final String name;
 
     /**
      * Creates a group named {@code name}.
@@ -17,13 +17,6 @@ public class Group extends UniquePersonList {
     public Group(String name) {
         super();
         this.name = name;
-    }
-
-    /**
-     * Renames the group to the specified {@code newName}.
-     */
-    public void rename(String newName) {
-        name = newName;
     }
 
     /**
@@ -37,7 +30,7 @@ public class Group extends UniquePersonList {
      * Checks if {@code group} has the same name as this group.
      * @return True if the groups have the same name, false otherwise.
      */
-    public boolean sameName(Group group) {
+    public boolean isSameName(Group group) {
         requireNonNull(group);
         return name.equals(group.name);
     }

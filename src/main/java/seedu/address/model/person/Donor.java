@@ -6,7 +6,6 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.util.Objects;
 import java.util.Set;
 
-import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -14,7 +13,7 @@ import seedu.address.model.tag.Tag;
  * Inherits from Person and includes donated amount from the donor.
  * Guarantees: details are present and not null, field values are validated.
  */
-public class Donor extends Person {
+public class Donor extends Person implements Comparable<Donor> {
 
     private final DonatedAmount donatedAmount;
 
@@ -51,17 +50,12 @@ public class Donor extends Person {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof seedu.address.model.person.Donor)) {
+        if (!(other instanceof Donor)) {
             return false;
         }
 
-        seedu.address.model.person.Donor otherDonor = (seedu.address.model.person.Donor) other;
-        return name.equals(otherDonor.name)
-                && phone.equals(otherDonor.phone)
-                && email.equals(otherDonor.email)
-                && address.equals(otherDonor.address)
-                && tags.equals(otherDonor.tags)
-                && donatedAmount.equals(otherDonor.donatedAmount);
+        Donor otherDonor = (Donor) other;
+        return super.equals(otherDonor) && (donatedAmount.equals(otherDonor.donatedAmount));
     }
 
     /**
@@ -71,7 +65,6 @@ public class Donor extends Person {
      */
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
         return Objects.hash(name, phone, email, address, tags, donatedAmount);
     }
 
@@ -82,18 +75,26 @@ public class Donor extends Person {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("name", name)
-                .add("phone", phone)
-                .add("email", email)
-                .add("address", address)
-                .add("tags", tags)
-                .add("hours", donatedAmount)
-                .toString();
+        String parentToString = super.toString();
+
+        // Remove the last '}' from parentToString before appending child class fields
+        parentToString = parentToString.substring(0, parentToString.length() - 1);
+
+        return parentToString + ", donatedAmount=" + donatedAmount + "}";
     }
 
+    @Override
     public Role getRole() {
         return Role.DONOR;
     }
 
+    /**
+     * Compares this Donor to another Donor based on donated amount
+     *
+     * @param donor the object to be compared.
+     */
+    @Override
+    public int compareTo(Donor donor) {
+        return this.donatedAmount.compareTo(donor.donatedAmount);
+    }
 }

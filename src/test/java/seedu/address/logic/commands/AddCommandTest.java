@@ -171,6 +171,20 @@ public class AddCommandTest {
         }
 
         @Override
+        public Group getGroup(String groupName) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setGroup(Group target, Group newGroup) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        public String getGroupNames() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void updatePersonListSort(Comparator<Person> comparator) {
             throw new AssertionError("This method should not be called.");
         }
@@ -185,6 +199,15 @@ public class AddCommandTest {
             throw new AssertionError("This method should not be called.");
         }
 
+        @Override
+        public boolean hasPersonsOfType(Class<? extends Person> personType) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasOnlyPersonsOfType(Class<? extends Person> personType) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
@@ -228,5 +251,4 @@ public class AddCommandTest {
             return new AddressBook();
         }
     }
-
 }

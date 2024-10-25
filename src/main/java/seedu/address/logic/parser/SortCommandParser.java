@@ -27,6 +27,7 @@ public class SortCommandParser implements Parser<SortCommand> {
         // Ensure there are no duplicate sort prefixes
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_SORT);
 
+        // Checks if sortOption prefix was used
         Optional<String> sortOption = argMultimap.getValue(PREFIX_SORT);
 
         if (sortOption.isEmpty()) {
@@ -35,6 +36,7 @@ public class SortCommandParser implements Parser<SortCommand> {
         }
 
         String sortOptionValue = sortOption.get().trim();
+        assert sortOptionValue != null : "Sort option value should not be null here";
 
         if (sortOptionValue.isEmpty()) {
             throw new ParseException(MESSAGE_EMPTY_SORT_OPTION);
@@ -42,6 +44,8 @@ public class SortCommandParser implements Parser<SortCommand> {
 
         // Ensure sort option is supported
         SortOption validSortOption = ParserUtil.parseSortOption(sortOptionValue);
+        assert validSortOption != null : "Parsed SortOption should not be null";
+
         return new SortCommand(validSortOption);
     }
 }

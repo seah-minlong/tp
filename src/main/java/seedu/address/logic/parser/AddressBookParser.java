@@ -13,19 +13,23 @@ import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
+import seedu.address.logic.commands.EmailCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.SearchCommand;
 import seedu.address.logic.commands.SetVolunteerHoursCommand;
 import seedu.address.logic.commands.SortCommand;
+import seedu.address.logic.commands.group.AddToGroupCommand;
 import seedu.address.logic.commands.group.CreateGroupCommand;
 import seedu.address.logic.commands.group.DeleteGroupCommand;
-import seedu.address.logic.commands.group.ViewGroupCommand;
+import seedu.address.logic.commands.group.EditGroupNameCommand;
+import seedu.address.logic.commands.group.ListGroupsCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.logic.parser.group.AddToGroupCommandParser;
 import seedu.address.logic.parser.group.CreateGroupCommandParser;
 import seedu.address.logic.parser.group.DeleteGroupCommandParser;
-import seedu.address.logic.parser.group.ViewGroupCommandParser;
+import seedu.address.logic.parser.group.EditGroupNameCommandParser;
 
 /**
  * Parses user input.
@@ -94,11 +98,20 @@ public class AddressBookParser {
         case DeleteGroupCommand.COMMAND_WORD:
             return new DeleteGroupCommandParser().parse(arguments);
 
-        case ViewGroupCommand.COMMAND_WORD:
-            return new ViewGroupCommandParser().parse(arguments);
+        case ListGroupsCommand.COMMAND_WORD:
+            return new ListGroupsCommand();
 
         case SortCommand.COMMAND_WORD:
             return new SortCommandParser().parse(arguments);
+
+        case EditGroupNameCommand.COMMAND_WORD:
+            return new EditGroupNameCommandParser().parse(arguments);
+
+        case EmailCommand.COMMAND_WORD:
+            return new EmailCommand();
+
+        case AddToGroupCommand.COMMAND_WORD:
+            return new AddToGroupCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

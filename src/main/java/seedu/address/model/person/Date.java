@@ -6,12 +6,13 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 /**
  * Represents a date with a specific format.
  * Guarantees: immutable; is valid as declared in {@link #isValidDate(String)}
  */
-public class Date {
+public class Date implements Comparable<Date> {
 
     public static final String MESSAGE_CONSTRAINTS =
             "Dates should be in the format yyyy-MM-dd and must be a valid date.";
@@ -19,7 +20,8 @@ public class Date {
     /*
      * The date format for parsing.
      */
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM-dd")
+            .withResolverStyle(ResolverStyle.STRICT);
 
     private final LocalDate date;
 
@@ -48,12 +50,6 @@ public class Date {
             return false;
         }
     }
-    /**
-     * Returns the wrapped {@code LocalDate} instance.
-     */
-    public LocalDate getLocalDate() {
-        return date;
-    }
 
     @Override
     public boolean equals(Object other) {
@@ -77,5 +73,10 @@ public class Date {
     @Override
     public String toString() {
         return date.format(FORMATTER);
+    }
+
+    @Override
+    public int compareTo(Date other) {
+        return date.compareTo(other.date);
     }
 }

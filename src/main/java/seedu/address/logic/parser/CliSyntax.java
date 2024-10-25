@@ -18,4 +18,5 @@ public class CliSyntax {
     public static final Prefix PREFIX_PARTNERSHIP_END_DATE = new Prefix("ped/");
     public static final Prefix PREFIX_GROUP_NAME = new Prefix("g/");
     public static final Prefix PREFIX_MEMBERS = new Prefix("m/");
+    public static final Prefix PREFIX_FILE_PATH = new Prefix("f/");
 }

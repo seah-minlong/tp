@@ -1,10 +1,14 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.group.AddToGroupCommandParser.MEMBER_MESSAGE_CONSTRAINTS;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.regex.PatternSyntaxException;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
@@ -196,9 +200,27 @@ public class ParserUtil {
     public static SortOption parseSortOption(String sortOption) throws ParseException {
         requireNonNull(sortOption);
         String trimmedOption = sortOption.trim();
-        if (!SortOption.isValidSortOption(trimmedOption)) {
+        try {
+            return SortOption.fromString(trimmedOption);
+        } catch (IllegalArgumentException e) {
             throw new ParseException(SortOption.MESSAGE_CONSTRAINTS);
         }
-        return new SortOption(trimmedOption);
+    }
+
+    /**
+     * Parses a {@code String membersAsString} into a {@code List<Index>}.
+     *
+     * @throws ParseException if the given membersAsString is invalid.
+     */
+    public static List<Index> parseMembers(String membersAsString) throws ParseException {
+        requireNonNull(membersAsString);
+        List<Index> members;
+        try {
+            members = Arrays.stream(membersAsString.split(" ")).map(
+                    i -> Index.fromOneBased(Integer.parseInt(i))).toList();
+        } catch (PatternSyntaxException | NumberFormatException e) {
+            throw new ParseException(MEMBER_MESSAGE_CONSTRAINTS);
+        }
+        return members;
     }
 }

@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_GROUP_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
@@ -17,6 +18,7 @@ import seedu.address.model.person.TagContainsKeywordsPredicate;
  * Parses input arguments and creates a new FindCommand object
  */
 public class SearchCommandParser implements Parser<SearchCommand> {
+    public static final String MESSAGE_EMPTY_SEARCH_PREFIX = "The prefix cannot be empty. Please input a prefix.";
 
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
@@ -24,20 +26,22 @@ public class SearchCommandParser implements Parser<SearchCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public SearchCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG, PREFIX_GROUP_NAME);
 
         if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SearchCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_TAG);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_TAG, PREFIX_GROUP_NAME);
 
         String nameArgs = argMultimap.getValue(PREFIX_NAME).orElse("");
         String tagArgs = argMultimap.getValue(PREFIX_TAG).orElse("");
+        String groupArgs = argMultimap.getValue(PREFIX_GROUP_NAME).orElse("");
 
         // Check for empty inputs after the prefixes
         checkForEmptyInput(argMultimap, PREFIX_NAME, nameArgs);
         checkForEmptyInput(argMultimap, PREFIX_TAG, tagArgs);
+        checkForEmptyInput(argMultimap, PREFIX_GROUP_NAME, groupArgs);
 
         Predicate<Person> combinedPredicate = null;
 
@@ -53,12 +57,12 @@ public class SearchCommandParser implements Parser<SearchCommand> {
             combinedPredicate = combinePredicate(combinedPredicate, tagPredicate);
         }
 
-        if (combinedPredicate == null) {
+        if (combinedPredicate == null && groupArgs.isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, SearchCommand.MESSAGE_USAGE));
         }
 
-        return new SearchCommand(combinedPredicate);
+        return new SearchCommand(combinedPredicate, groupArgs);
     }
 
 
@@ -74,7 +78,7 @@ public class SearchCommandParser implements Parser<SearchCommand> {
     private void checkForEmptyInput(ArgumentMultimap argMultimap, Prefix prefix, String value)
             throws ParseException {
         if (argMultimap.getValue(prefix).isPresent() && value.trim().isEmpty()) {
-            throw new ParseException("The prefix cannot be empty. Please input a keyword for the prefix.");
+            throw new ParseException(MESSAGE_EMPTY_SEARCH_PREFIX);
         }
     }
 

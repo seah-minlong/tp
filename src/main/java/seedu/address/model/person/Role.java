@@ -44,4 +44,13 @@ public enum Role {
                 || test.equalsIgnoreCase("partner")
                 || test.equalsIgnoreCase("person");
     }
+
+    /**
+     * Returns the lowercase string representation of the enum.
+     *
+     * @return The name of the role in lowercase.
+     */
+    public String toLowerCase() {
+        return name().toLowerCase();
+    }
 }

@@ -42,7 +42,7 @@ public class Hours implements Comparable<Hours> {
 
     @Override
     public int compareTo(Hours hours) {
-        return this.hours.compareTo(hours.hours);
+        return -this.hours.compareTo(hours.hours);
     }
 
     @Override

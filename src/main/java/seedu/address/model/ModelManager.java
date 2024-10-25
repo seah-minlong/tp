@@ -86,6 +86,7 @@ public class ModelManager implements Model {
     @Override
     public void setAddressBook(ReadOnlyAddressBook addressBook) {
         this.addressBook.resetData(addressBook);
+        logger.info("Address book data has been reset.");
     }
 
     @Override
@@ -130,6 +131,23 @@ public class ModelManager implements Model {
         addressBook.removeGroup(group);
     }
 
+    @Override
+    public void setGroup(Group oldGroup, Group newGroup) {
+        requireNonNull(oldGroup);
+        requireNonNull(newGroup);
+        addressBook.setGroup(oldGroup, newGroup);
+    }
+
+    @Override
+    public Group getGroup(String groupName) {
+        requireNonNull(groupName);
+        return addressBook.getGroup(groupName);
+    }
+
+    public String getGroupNames() {
+        return addressBook.getGroupNames();
+    }
+
     //=========== Person List Accessors ======================================================================
 
     /**
@@ -145,6 +163,18 @@ public class ModelManager implements Model {
     public ObservableList<Person> getPersonList() {
         // sortedPersons observes changes in filteredPersons
         return sortedPersons;
+    }
+
+    @Override
+    public boolean hasPersonsOfType(Class<? extends Person> personType) {
+        requireNonNull(personType);
+        return filteredPersons.stream().anyMatch(personType::isInstance);
+    }
+
+    @Override
+    public boolean hasOnlyPersonsOfType(Class<? extends Person> personType) {
+        requireNonNull(personType);
+        return filteredPersons.stream().allMatch(personType::isInstance);
     }
 
     //=========== Filtered Person List Accessors =============================================================
@@ -166,12 +196,15 @@ public class ModelManager implements Model {
     //=========== Sorted Person List Accessors =============================================================
     @Override
     public void updatePersonListSort(Comparator<Person> comparator) {
+        requireNonNull(comparator);
         sortedPersons.setComparator(comparator);
+        logger.fine("Person list sorted with new comparator.");
     }
 
     @Override
     public void clearPersonSort() {
         sortedPersons.setComparator(null);
+        logger.fine("Cleared person list sort. Reset to default order.");
     }
 
     @Override

@@ -439,8 +439,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | Volunteer Participation Hours | A record of the number of hours a volunteer has contributed to activities or events                                     |
 | Tag                           | A keyword or label applied to a contact for easier filtering or searching                                               |
 | Search Query                  | A user-provided input (e.g., name or role) to filter contacts in the list                                               |
-| Reminder                      | A notification or prompt that alerts users to follow up on an important task, such as donation drives                   |
-
+| Role                          | A Volunteer, Donor or Partner                                                                                           |
+| Group                         | A named collection of contacts, allowing users to filter or perform actions on specific subsets of people easily.       |
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**

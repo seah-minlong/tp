@@ -1,10 +1,13 @@
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import seedu.address.model.person.exceptions.DuplicateGroupException;
 import seedu.address.model.person.exceptions.GroupNotFoundException;
 import seedu.address.storage.JsonAdaptedGroup;
@@ -15,14 +18,10 @@ import seedu.address.storage.JsonAdaptedGroup;
  * @see Group
  */
 public class GroupList {
-    private final ArrayList<Group> groups;
 
-    /**
-     * Initialise {@code GroupList} with an empty list of groups.
-     */
-    public GroupList() {
-        groups = new ArrayList<>();
-    }
+    private final ObservableList<Group> internalList = FXCollections.observableArrayList();
+    private final ObservableList<Group> internalUnmodifiableList =
+            FXCollections.unmodifiableObservableList(internalList);
 
     /**
      * Checks if the list contains a group with the same name as {@code group}.
@@ -30,7 +29,7 @@ public class GroupList {
      */
     public boolean contains(Group group) {
         requireNonNull(group);
-        return groups.stream().anyMatch(group::sameName);
+        return internalList.stream().anyMatch(group::isSameName);
     }
 
     /**
@@ -38,7 +37,7 @@ public class GroupList {
      */
     public boolean containsExact(Group group) {
         requireNonNull(group);
-        return groups.stream().anyMatch(group::equals);
+        return internalList.stream().anyMatch(group::equals);
     }
 
     /**
@@ -50,7 +49,7 @@ public class GroupList {
         if (contains(toAdd)) {
             throw new DuplicateGroupException();
         }
-        groups.add(toAdd);
+        internalList.add(toAdd);
     }
 
     /**
@@ -59,13 +58,9 @@ public class GroupList {
      */
     public void remove(Group toRemove) throws GroupNotFoundException {
         requireNonNull(toRemove);
-        for (Group group : groups) {
-            if (group.sameName(toRemove)) {
-                groups.remove(group);
-                return;
-            }
+        if (!internalList.remove(toRemove)) {
+            throw new GroupNotFoundException();
         }
-        throw new GroupNotFoundException();
     }
 
     /**
@@ -78,6 +73,21 @@ public class GroupList {
         remove(toRemove);
     }
 
+    public void setGroup(Group target, Group editedGroup) {
+        requireAllNonNull(target, editedGroup);
+
+        int index = internalList.indexOf(target);
+        if (index == -1) {
+            throw new GroupNotFoundException();
+        }
+
+        if (!target.isSameName(editedGroup) && contains(editedGroup)) {
+            throw new DuplicateGroupException();
+        }
+
+        internalList.set(index, editedGroup);
+    }
+
     /**
      * Returns the group in the list which has name matching {@code groupName}.
      * @throws GroupNotFoundException If no such group exists.
@@ -85,27 +95,45 @@ public class GroupList {
     public Group get(String groupName) throws GroupNotFoundException {
         requireNonNull(groupName);
         Group toFind = new Group(groupName);
-        for (Group group : groups) {
-            if (group.sameName(toFind)) {
-                return group;
-            }
+        Optional<Group> groupOptional = internalList.stream()
+                .filter(group -> group.isSameName(toFind))
+                .findFirst();
+
+        if (groupOptional.isPresent()) {
+            return groupOptional.get();
         }
+
         throw new GroupNotFoundException();
+    }
+
+    /**
+     * Returns the names of every {@code Group} in the {@code GroupList}.
+     */
+    public String getNames() {
+        StringBuilder names = new StringBuilder();
+        for (Group group : internalList) {
+            names.append(group.getName());
+            names.append(", ");
+        }
+        // delete the last ", "
+        names.deleteCharAt(names.length() - 1);
+        names.deleteCharAt(names.length() - 1);
+        return names.toString();
     }
 
     /**
      * Returns this list as a list of {@code JsonAdaptedGroup}s suitable for storage.
      */
     public List<JsonAdaptedGroup> toJson() {
-        return groups.stream().map(JsonAdaptedGroup::new).toList();
+        return internalList.stream().map(JsonAdaptedGroup::new).toList();
     }
 
     /**
      * Clears the {@code GroupList} and sets its contents to that of {@code toCopy}.
      */
     public void set(GroupList toCopy) {
-        groups.clear();
-        groups.addAll(toCopy.groups);
+        internalList.clear();
+        internalList.addAll(toCopy.internalList);
     }
 
     @Override
@@ -116,6 +144,6 @@ public class GroupList {
         if (!(o instanceof GroupList groupList)) {
             return false;
         }
-        return groups.stream().allMatch(groupList::containsExact);
+        return internalList.stream().allMatch(groupList::containsExact);
     }
 }

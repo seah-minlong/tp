@@ -7,7 +7,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  * Represents the amount donated by a donor in thousands of dollars (k dollar).
  * Guarantees: immutable; is valid as declared in {@link #isValidAmount(String)}
  */
-public class DonatedAmount {
+public class DonatedAmount implements Comparable<DonatedAmount> {
 
     public static final String MESSAGE_CONSTRAINTS =
             "Donated amount should be a non-negative number with up to two decimal places.";
@@ -63,5 +63,10 @@ public class DonatedAmount {
     @Override
     public String toString() {
         return amount.toString();
+    }
+
+    @Override
+    public int compareTo(DonatedAmount other) {
+        return Double.compare(other.amount, this.amount);
     }
 }

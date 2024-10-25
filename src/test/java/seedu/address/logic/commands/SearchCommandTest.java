@@ -40,14 +40,14 @@ public class SearchCommandTest {
         NameContainsKeywordsPredicate secondPredicate =
                 new NameContainsKeywordsPredicate(Collections.singletonList("second"));
 
-        SearchCommand searchFirstCommand = new SearchCommand(firstPredicate);
-        SearchCommand searchSecondCommand = new SearchCommand(secondPredicate);
+        SearchCommand searchFirstCommand = new SearchCommand(firstPredicate, null);
+        SearchCommand searchSecondCommand = new SearchCommand(secondPredicate, null);
 
         // same object -> returns true
         assertTrue(searchFirstCommand.equals(searchFirstCommand));
 
         // same values -> returns true
-        SearchCommand searchFirstCommandCopy = new SearchCommand(firstPredicate);
+        SearchCommand searchFirstCommandCopy = new SearchCommand(firstPredicate, null);
         assertTrue(searchFirstCommand.equals(searchFirstCommandCopy));
 
         // different types -> returns false
@@ -64,7 +64,7 @@ public class SearchCommandTest {
     public void execute_zeroNameKeywords_noPersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
         NameContainsKeywordsPredicate predicate = prepareNamePredicate(" ");
-        SearchCommand command = new SearchCommand(predicate);
+        SearchCommand command = new SearchCommand(predicate, null);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.emptyList(), model.getPersonList());
@@ -74,7 +74,7 @@ public class SearchCommandTest {
     public void execute_multipleNameKeywords_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
         NameContainsKeywordsPredicate predicate = prepareNamePredicate("Kurz Elle Kunz");
-        SearchCommand command = new SearchCommand(predicate);
+        SearchCommand command = new SearchCommand(predicate, null);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getPersonList());
@@ -84,7 +84,7 @@ public class SearchCommandTest {
     public void execute_zeroTagKeywords_noPersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
         TagContainsKeywordsPredicate predicate = prepareTagPredicate(" ");
-        SearchCommand command = new SearchCommand(predicate);
+        SearchCommand command = new SearchCommand(predicate, null);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.emptyList(), model.getPersonList());
@@ -94,7 +94,7 @@ public class SearchCommandTest {
     public void execute_singleTagKeyword_singlePersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
         TagContainsKeywordsPredicate predicate = prepareTagPredicate("owesMoney");
-        SearchCommand command = new SearchCommand(predicate);
+        SearchCommand command = new SearchCommand(predicate, null);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.singletonList(BENSON), model.getPersonList());
@@ -104,7 +104,7 @@ public class SearchCommandTest {
     public void execute_multipleTagKeywords_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
         TagContainsKeywordsPredicate predicate = prepareTagPredicate("friends");
-        SearchCommand command = new SearchCommand(predicate);
+        SearchCommand command = new SearchCommand(predicate, null);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(ALICE, BENSON, DANIEL), model.getPersonList());
@@ -116,7 +116,7 @@ public class SearchCommandTest {
         NameContainsKeywordsPredicate namePredicate = prepareNamePredicate("Alice");
         TagContainsKeywordsPredicate tagPredicate = prepareTagPredicate("friends");
         Predicate<Person> combinedPredicate = namePredicate.and(tagPredicate);
-        SearchCommand command = new SearchCommand(combinedPredicate);
+        SearchCommand command = new SearchCommand(combinedPredicate, null);
         expectedModel.updateFilteredPersonList(combinedPredicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.singletonList(ALICE), model.getPersonList());
@@ -128,7 +128,7 @@ public class SearchCommandTest {
         NameContainsKeywordsPredicate namePredicate = prepareNamePredicate("NonExistentName");
         TagContainsKeywordsPredicate tagPredicate = prepareTagPredicate("friend");
         Predicate<Person> combinedPredicate = namePredicate.and(tagPredicate);
-        SearchCommand command = new SearchCommand(combinedPredicate);
+        SearchCommand command = new SearchCommand(combinedPredicate, null);
         expectedModel.updateFilteredPersonList(combinedPredicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.emptyList(), model.getPersonList());
@@ -137,7 +137,7 @@ public class SearchCommandTest {
     @Test
     public void toStringMethodWithTagPredicate() {
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(Arrays.asList("tagKeyword"));
-        SearchCommand searchCommand = new SearchCommand(predicate);
+        SearchCommand searchCommand = new SearchCommand(predicate, null);
         String expected = SearchCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, searchCommand.toString());
     }
@@ -145,7 +145,7 @@ public class SearchCommandTest {
     @Test
     public void toStringMethodWithNamePredicate() {
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Arrays.asList("keyword"));
-        SearchCommand searchCommand = new SearchCommand(predicate);
+        SearchCommand searchCommand = new SearchCommand(predicate, null);
         String expected = SearchCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, searchCommand.toString());
     }

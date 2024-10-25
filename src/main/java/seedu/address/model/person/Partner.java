@@ -5,7 +5,6 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.util.Objects;
 import java.util.Set;
 
-import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -13,7 +12,7 @@ import seedu.address.model.tag.Tag;
  * Inherits from Person and includes the end date of partnership with NGO.
  * Guarantees: details are present and not null, field values are validated.
  */
-public class Partner extends Person {
+public class Partner extends Person implements Comparable<Partner> {
 
     private final Date partnershipEndDate;
     /**
@@ -54,12 +53,7 @@ public class Partner extends Person {
         }
 
         Partner otherPartner = (Partner) other;
-        return name.equals(otherPartner.name)
-                && phone.equals(otherPartner.phone)
-                && email.equals(otherPartner.email)
-                && address.equals(otherPartner.address)
-                && tags.equals(otherPartner.tags)
-                && partnershipEndDate.equals(otherPartner.partnershipEndDate);
+        return super.equals(other) && partnershipEndDate.equals(otherPartner.partnershipEndDate);
     }
 
     /**
@@ -69,7 +63,6 @@ public class Partner extends Person {
      */
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
         return Objects.hash(name, phone, email, address, tags, partnershipEndDate);
     }
 
@@ -80,17 +73,21 @@ public class Partner extends Person {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("name", name)
-                .add("phone", phone)
-                .add("email", email)
-                .add("address", address)
-                .add("tags", tags)
-                .add("hours", partnershipEndDate)
-                .toString();
+        String parentToString = super.toString();
+
+        // Remove the last '}' from parentToString before appending child class fields
+        parentToString = parentToString.substring(0, parentToString.length() - 1);
+
+        return parentToString + ", partnershipEndDate=" + partnershipEndDate + "}";
     }
 
+    @Override
     public Role getRole() {
         return Role.PARTNER;
+    }
+
+    @Override
+    public int compareTo(Partner other) {
+        return this.partnershipEndDate.compareTo(other.partnershipEndDate);
     }
 }
