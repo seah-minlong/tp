@@ -40,7 +40,7 @@ public class DeleteGroupCommand extends Command {
         } catch (GroupNotFoundException e) {
             throw new CommandException(e.getMessage());
         }
-        return new CommandResult(String.format(MESSAGE_DELETE_GROUP_SUCCESS, groupName));
+        return new CommandResult(String.format(MESSAGE_DELETE_GROUP_SUCCESS, groupName), true);
     }
 
     @Override

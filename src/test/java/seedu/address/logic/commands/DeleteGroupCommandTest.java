@@ -38,13 +38,12 @@ public class DeleteGroupCommandTest {
         assertCommandFailure(command, model, new GroupNotFoundException().getMessage());
     }
 
-
     @Test
     public void execute_groupExist_success() {
         String validGroupName = "test";
         DeleteGroupCommand command = new DeleteGroupCommand(validGroupName);
-
-        assertCommandSuccess(command, model,
-                String.format(DeleteGroupCommand.MESSAGE_DELETE_GROUP_SUCCESS, validGroupName), expectedModel);
+        CommandResult expectedCommandResult =
+                new CommandResult(String.format(DeleteGroupCommand.MESSAGE_DELETE_GROUP_SUCCESS, validGroupName), true);
+        assertCommandSuccess(command, model, expectedCommandResult, expectedModel);
     }
 }

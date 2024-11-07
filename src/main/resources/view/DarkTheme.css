@@ -1,12 +1,3 @@
-@font-face {
-    font-family: "Roboto";
-    src: url("fonts/Roboto-Regular.ttf");
-}
-
-@font-face {
-    font-family: "Futura";
-    src: url("fonts/Futura_Medium.ttf");
-}
 
 .background {
     -fx-background-color: derive(#C8E4D4, 20%);
@@ -15,28 +6,24 @@
 
 .label {
     -fx-font-size: 11pt;
-    -fx-font-family: "Roboto";
     -fx-text-fill: #555555;
     -fx-opacity: 0.9;
 }
 
 .label-bright {
     -fx-font-size: 11pt;
-    -fx-font-family: "Roboto";
     -fx-text-fill: white;
     -fx-opacity: 1;
 }
 
 .label-header {
     -fx-font-size: 32pt;
-    -fx-font-family: "Roboto";
     -fx-text-fill: white;
     -fx-opacity: 1;
 }
 
 .text-field {
     -fx-font-size: 12pt;
-    -fx-font-family: "Roboto";
 }
 
 .tab-pane {
@@ -52,7 +39,6 @@
 .table-view {
     -fx-base: #A8D5BA;
     -fx-control-inner-background: #A8D5BA;
-    -fx-background-color: #black;
     -fx-table-cell-border-color: transparent;
     -fx-table-header-border-color: transparent;
     -fx-padding: 5;
@@ -76,7 +62,6 @@
 
 .table-view .column-header .label {
     -fx-font-size: 20pt;
-    -fx-font-family: "Roboto";
     -fx-text-fill: white;
     -fx-alignment: center-left;
     -fx-opacity: 1;
@@ -100,7 +85,7 @@
 .list-view {
     -fx-background-insets: 0;
     -fx-padding: 0;
-    -fx-background-color: black;
+    -fx-background-color: derive(#1d1d1d, 20%);
 }
 
 .list-cell {
@@ -133,14 +118,12 @@
 }
 
 .cell_big_label {
-    -fx-font-family: "Futura";
-    -fx-font-size: 20px;
+    -fx-font-size: 17px;
     -fx-text-fill: #010504;
 }
 
 .cell_small_label {
-    -fx-font-family: "Roboto";
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-text-fill: #010504;
 }
 
@@ -210,7 +193,6 @@
 
 .menu-bar .label {
     -fx-font-size: 14pt;
-    -fx-font-family: "Futura";
     -fx-text-fill: white;
     -fx-opacity: 0.9;
 }
@@ -360,8 +342,7 @@
     -fx-padding: 1 3 1 3;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
-    -fx-font-size: 15;
-    -fx-font-family: "Futura";
+    -fx-font-size: 14;
 }
 
 .role-person {
@@ -370,8 +351,7 @@
     -fx-padding: 0 3 0 3;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
-    -fx-font-size: 15;
-    -fx-font-family: "Futura";
+    -fx-font-size: 14;
 }
 
 .role-donor {
@@ -380,8 +360,7 @@
     -fx-padding: 0 3 0 3;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
-    -fx-font-size: 15;
-    -fx-font-family: "Futura";
+    -fx-font-size: 14;
 }
 
 .role-volunteer {
@@ -391,7 +370,6 @@
     -fx-border-radius: 2;
      -fx-background-radius: 2;
     -fx-font-size: 15;
-    -fx-font-family: "Futura";
 }
 
 .role-partner {
@@ -400,8 +378,7 @@
     -fx-padding: 0 3 0 3;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
-    -fx-font-size: 15;
-    -fx-font-family: "Futura";
+    -fx-font-size: 14;
 }
 
 .group-size {
@@ -410,8 +387,7 @@
     -fx-padding: 0 3 0 3;
     -fx-border-radius: 10;
      -fx-background-radius: 2;
-    -fx-font-size: 15;
-    -fx-font-family: "Futura";
+    -fx-font-size: 14;
 }
 
 .members-label {
@@ -420,18 +396,15 @@
     -fx-padding: 0 3 0 3;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
-    -fx-font-family: "Futura";
     -fx-font-size: 12pt;
 }
 
 .membersList {
     -fx-text-fill: #2E4057;
-    -fx-font-family: "Roboto";
     -fx-font-size: 12pt;
 }
 
 .groupList {
     -fx-text-fill: #2E4057;
-    -fx-font-family: "Roboto";
     -fx-font-size: 12pt;
 }

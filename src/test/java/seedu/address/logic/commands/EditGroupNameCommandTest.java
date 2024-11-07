@@ -27,13 +27,13 @@ public class EditGroupNameCommandTest {
     public void execute_success() {
         EditGroupNameCommand editGroupNameCommand = new EditGroupNameCommand("NUS", "SMU");
         String expectedMessage = String.format(EditGroupNameCommand.MESSAGE_EDIT_GROUP_SUCCESS, "NUS", "SMU");
+        CommandResult expectedCommandResult = new CommandResult(expectedMessage, true);
 
         Model expectedModel = new ModelManager(new AddressBook(getTypicalAddressBook()), new UserPrefs());
         expectedModel.addGroup(new GroupBuilder<>().withName("SMU").build());
 
         System.out.println("Expected: " + expectedModel.getGroupNames());
         System.out.println("Actual: " + model.getGroupNames());
-
-        assertCommandSuccess(editGroupNameCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(editGroupNameCommand, model, expectedCommandResult, expectedModel);
     }
 }

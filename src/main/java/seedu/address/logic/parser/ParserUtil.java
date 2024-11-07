@@ -218,7 +218,7 @@ public class ParserUtil {
         try {
             members = Arrays.stream(membersAsString.split(" ")).map(
                     i -> Index.fromOneBased(Integer.parseInt(i))).toList();
-        } catch (PatternSyntaxException | NumberFormatException e) {
+        } catch (PatternSyntaxException | NumberFormatException | IndexOutOfBoundsException e) {
             throw new ParseException(MEMBER_MESSAGE_CONSTRAINTS);
         }
         return members;

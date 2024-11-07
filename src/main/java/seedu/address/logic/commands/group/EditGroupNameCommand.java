@@ -69,7 +69,7 @@ public class EditGroupNameCommand extends Command {
         } catch (DuplicateGroupException dge) {
             throw new CommandException(MESSAGE_EDIT_GROUP_NAME_EXISTS);
         }
-        return new CommandResult(String.format(MESSAGE_EDIT_GROUP_SUCCESS, oldGroupName, newGroupName));
+        return new CommandResult(String.format(MESSAGE_EDIT_GROUP_SUCCESS, oldGroupName, newGroupName), true);
     }
 
     /**

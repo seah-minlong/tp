@@ -64,7 +64,7 @@ public class CreateGroupCommand extends Command {
         } catch (DuplicateGroupException e) {
             throw new CommandException(e.getMessage());
         }
-        return new CommandResult(String.format(MESSAGE_CREATE_GROUP_SUCCESS, groupName));
+        return new CommandResult(String.format(MESSAGE_CREATE_GROUP_SUCCESS, groupName), true);
     }
 
     @Override

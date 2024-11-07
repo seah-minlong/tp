@@ -121,6 +121,7 @@ public class MainWindow extends UiPart<Stage> {
 
         ObservableList<Group> groupList = logic.getGroupList();
         groupListPanel = new GroupListPanel(groupList);
+        personListPanel.addObserver(groupListPanel);
         groupListPanelPlaceholder.getChildren().add(groupListPanel.getRoot());
         groupListPanelPlaceholder.setVisible(false); // Initially hide GroupListPanel if toggling
 
